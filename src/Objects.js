@@ -8,28 +8,24 @@
   Объект после манипуляций следует вернуть в качестве результата работы функции.
 */
 export function personUpdate(data) {
-  if (data.gender === 'female') {
-    const { age, ...other } = data;
-    return other;
-  }
-  else {
-    return {
-      ...data,
-      income: data.income ? data.income : 100000
+    if (data.gender === 'female') {
+        const { age, ...other } = data;
+        return other;
+    } else {
+        return {
+            ...data,
+            income: data.income ? data.income : 100000,
+        };
     }
-  }
 }
-
 
 /*
   В функцию objectFieldsList приходят три объекта с различными полями, список которых заранее неизвестен.
   Верните список названий этих полей в алфавитном порядке в виде массива строк.
 */
 export function objectFieldsList(obj1, obj2, obj3) {
-  return Object.keys({ ...obj1, ...obj2, ...obj3 }).sort();
+    return Object.keys({ ...obj1, ...obj2, ...obj3 }).sort();
 }
-
-
 
 /*
   Верните в результате работы функции массив с клонами объекта obj.
@@ -37,13 +33,26 @@ export function objectFieldsList(obj1, obj2, obj3) {
   Количество клонов - count.
 */
 export function objectClone(obj, count) {
-  const arr = [];
-  for (let i = 0; i < count; i++) {
-    arr.push({
-      id: i,
-      ...obj
-    })
-  }
+    const arr = [];
 
-  return arr;
+    function copy(objForCopy) {
+        let copyObj = {};
+
+        let value;
+        for (let key in objForCopy) {
+            value = objForCopy[key];
+            copyObj[key] = typeof value === 'object' ? copy(value) : value;
+        }
+        return copyObj;
+    }
+
+    for (let i = 0; i < count; i++) {
+        let objCopy = copy(obj);
+        arr.push({
+            id: i,
+            ...objCopy,
+        });
+    }
+
+    return arr;
 }
